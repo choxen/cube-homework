@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Rules\IsAlreadyLoggedIn;
+use App\Rules\IsPasswordCorrect;
+use App\Rules\UserExists;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,18 +36,21 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
-        $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
-
         $user = User::where('email', $request->get('email'))->first();
 
-        if (!$user || !Hash::check($request->get('password'), $user->password)) {
-            return response()->json([
-                'message' => 'Bad login information'
-            ], 401);
-        }
+        $request->validate([
+            'email' => [
+                'required',
+                'string',
+                new UserExists($user),
+                new IsAlreadyLoggedIn($user)
+            ],
+            'password' => [
+                'required',
+                'string',
+                new IsPasswordCorrect($user)
+            ]
+        ]);
 
         $token = $user->createToken('user_token')->plainTextToken;
 
