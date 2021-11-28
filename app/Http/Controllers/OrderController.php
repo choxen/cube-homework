@@ -56,4 +56,29 @@ class OrderController extends Controller
             $orders
         ]);
     }
+
+    public function updateStatus(Request $request): JsonResponse
+    {
+        $request->validate([
+            'order_id' => 'required',
+            'status' => 'required'
+        ]);
+
+        $orderId = $request->get('order_id');
+        $status = $request->get('status');
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return response()->json([
+                'message' => 'Order with this ID does not exist'
+            ]);
+        }
+
+        $order->status = $status;
+        $order->save();
+
+        return response()->json([
+            'message' => 'Order status with ID: ' . $orderId . ' has been updated successfully'
+        ]);
+    }
 }
