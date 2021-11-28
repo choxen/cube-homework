@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Rules\OrderExists;
+use App\Services\ChangeOrderStatusService;
 use App\Services\MakeOrderService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -57,25 +59,20 @@ class OrderController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request): JsonResponse
+    public function updateStatus(Request $request, ChangeOrderStatusService $service): JsonResponse
     {
         $request->validate([
-            'order_id' => 'required',
+            'order_id' => [
+                'required',
+                new OrderExists()
+            ],
             'status' => 'required'
         ]);
 
         $orderId = $request->get('order_id');
         $status = $request->get('status');
-        $order = Order::find($orderId);
 
-        if (!$order) {
-            return response()->json([
-                'message' => 'Order with this ID does not exist'
-            ]);
-        }
-
-        $order->status = $status;
-        $order->save();
+        $service->execute($orderId, $status);
 
         return response()->json([
             'message' => 'Order status with ID: ' . $orderId . ' has been updated successfully'

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Rules\ProductExists;
+use App\Services\AddProductQuantityService;
 use App\Services\AddProductService;
+use App\Services\RemoveProductQuantityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -36,21 +39,60 @@ class ProductController extends Controller
     public function show(Request $request): JsonResponse
     {
         $request->validate([
-            'product_id' => 'required'
+            'product_id' => [
+                'required',
+                new ProductExists()
+            ]
         ]);
 
         $productId = $request->get('product_id');
 
         $product = Product::find($productId);
 
-        if (!$product) {
-            return response()->json([
-                'message' => 'Product with ID: ' . $productId . ' does not exist.'
-            ]);
-        }
-
         return response()->json([
             $product
+        ]);
+    }
+
+    public function addQuantity(Request $request, AddProductQuantityService $service): JsonResponse
+    {
+        $request->validate([
+            'product_id' => [
+                'required',
+                new ProductExists(),
+            ],
+            'quantity' => 'required',
+        ]);
+
+        $service->execute(
+            $request->get('product_id'),
+            $request->get('quantity')
+        );
+
+        return response()->json([
+            'message' => 'Product quantity has been updated successfully'
+        ]);
+    }
+
+    public function removeQuantity(Request $request, RemoveProductQuantityService $service): JsonResponse
+    {
+        $request->validate([
+            'product_id' => [
+                'required',
+                new ProductExists()
+            ],
+            'quantity' => [
+                'required',
+            ],
+        ]);
+
+        $service->execute(
+            $request->get('product_id'),
+            $request->get('quantity')
+        );
+
+        return response()->json([
+            'message' => 'Product quantity has been updated successfully'
         ]);
     }
 }
