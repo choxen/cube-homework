@@ -7,13 +7,13 @@ use App\Models\Product;
 use App\Models\ProductData;
 use Illuminate\Http\Request;
 
-class AddProductService
+class StoreProductService
 {
     public function execute(Request $request)
     {
         foreach ($request->products as $data) {
             $productData = new ProductData($data);
-            
+
             $product = Product::create([
                 'category' => $productData->category(),
                 'title' => $productData->title(),

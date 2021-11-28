@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Rules\OrderExists;
 use App\Services\ChangeOrderStatusService;
-use App\Services\MakeOrderService;
+use App\Services\StoreOrderService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function store(Request $request, MakeOrderService $service): JsonResponse
+    public function store(Request $request, StoreOrderService $service): JsonResponse
     {
         $this->validate($request, [
             'orders' => 'required|array',

@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\OrderData;
 use Illuminate\Http\Request;
 
-class MakeOrderService
+class StoreOrderService
 {
     public function execute(Request $request)
     {

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Rules\IsAlreadyLoggedIn;
 use App\Rules\IsPasswordCorrect;
 use App\Rules\UserExists;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -43,7 +41,6 @@ class AuthController extends Controller
                 'required',
                 'string',
                 new UserExists($user),
-                new IsAlreadyLoggedIn($user)
             ],
             'password' => [
                 'required',

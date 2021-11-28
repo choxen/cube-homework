@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barcode;
 use App\Models\Product;
 use App\Rules\ProductExists;
 use App\Services\AddProductQuantityService;
-use App\Services\AddProductService;
+use App\Services\StoreProductService;
 use App\Services\RemoveProductQuantityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function store(Request $request, AddProductService $service)
+    public function store(Request $request, StoreProductService $service)
     {
         $this->validate($request, [
             'products' => 'required|array|min:1',
@@ -47,10 +48,10 @@ class ProductController extends Controller
 
         $productId = $request->get('product_id');
 
-        $product = Product::find($productId);
+        $product = Product::with('barcode')->where('id', $productId)->get();
 
         return response()->json([
-            $product
+            'product' => $product,
         ]);
     }
 
