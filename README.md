@@ -3,4 +3,4 @@
 
 ### Functionality example:
 
-![Test](../master/screenshots/login.png)
+![Test](https://github.com/choxen/cube-homework/blob/main/screenshots/login.png)
