@@ -20,6 +20,10 @@ class Product extends Model
         'quantity',
     ];
 
+    protected $dates = [
+        'updated_at'
+    ];
+
     public function barcode()
     {
         return $this->hasMany(Barcode::class);
