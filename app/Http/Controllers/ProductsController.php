@@ -11,7 +11,7 @@ use App\Services\RemoveProductQuantityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
     public function store(Request $request, StoreProductService $service)
     {

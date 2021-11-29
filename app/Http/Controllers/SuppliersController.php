@@ -7,7 +7,7 @@ use App\Services\StoreSupplierService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class SuppliersController extends Controller
 {
     public function store(Request $request, StoreSupplierService $service): JsonResponse
     {

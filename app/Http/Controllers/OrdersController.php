@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class OrdersController extends Controller
 {
     public function store(Request $request, StoreOrderService $service): JsonResponse
     {
